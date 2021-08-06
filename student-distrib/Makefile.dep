@@ -1,0 +1,129 @@
+boot.o: boot.S multiboot.h x86_desc.h types.h
+x86_desc.o: x86_desc.S x86_desc.h types.h
+filesys.o: filesys.c filesys.h types.h process.h interrupt/keyboard.h \
+  interrupt/../types.h paging.h library/lib.h library/../types.h \
+  interrupt/sys_call.h interrupt/../library/lib.h interrupt/../filesys.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../terminal.h \
+  interrupt/../types.h interrupt/../process.h terminal.h
+kernel.o: kernel.c multiboot.h types.h x86_desc.h library/lib.h \
+  library/../types.h interrupt/i8259.h interrupt/../types.h debug.h \
+  tests.h interrupt/idt_init.h interrupt/sys_call.h \
+  interrupt/../library/lib.h interrupt/../filesys.h interrupt/../types.h \
+  interrupt/../process.h interrupt/../interrupt/keyboard.h \
+  interrupt/../interrupt/../types.h interrupt/../filesys.h \
+  interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../terminal.h \
+  interrupt/../process.h interrupt/rtc.h interrupt/keyboard.h paging.h \
+  filesys.h interrupt/pit.h library/dynamic_allocation.h
+paging.o: paging.c paging.h types.h library/lib.h library/../types.h \
+  process.h interrupt/keyboard.h interrupt/../types.h filesys.h \
+  interrupt/sys_call.h interrupt/../library/lib.h interrupt/../filesys.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../terminal.h \
+  interrupt/../types.h interrupt/../process.h terminal.h \
+  library/dynamic_allocation.h
+process.o: process.c process.h types.h interrupt/keyboard.h \
+  interrupt/../types.h filesys.h paging.h library/lib.h \
+  library/../types.h interrupt/sys_call.h interrupt/../library/lib.h \
+  interrupt/../filesys.h interrupt/rtc.h interrupt/i8259.h \
+  interrupt/../terminal.h interrupt/../types.h interrupt/../process.h \
+  terminal.h x86_desc.h
+speaker.o: speaker.c speaker.h library/lib.h library/../types.h \
+  interrupt/sys_call.h interrupt/../library/lib.h interrupt/../filesys.h \
+  interrupt/../types.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../types.h \
+  interrupt/../terminal.h interrupt/../process.h interrupt/pit.h \
+  interrupt/rtc.h
+terminal.o: terminal.c terminal.h types.h interrupt/keyboard.h \
+  interrupt/../types.h library/lib.h library/../types.h library/cursor.h \
+  library/lib.h paging.h library/dynamic_allocation.h
+tests.o: tests.c tests.h x86_desc.h types.h library/lib.h \
+  library/../types.h interrupt/idt_init.h interrupt/sys_call.h \
+  interrupt/../library/lib.h interrupt/../filesys.h interrupt/../types.h \
+  interrupt/../process.h interrupt/../interrupt/keyboard.h \
+  interrupt/../interrupt/../types.h interrupt/../filesys.h \
+  interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../types.h \
+  interrupt/../terminal.h interrupt/../process.h paging.h terminal.h \
+  interrupt/rtc.h filesys.h process.h interrupt/sys_call.h speaker.h \
+  interrupt/pit.h interrupt/sb16.h library/dynamic_allocation.h
+idt_linkage.o: interrupt/idt_linkage.S
+i8259.o: interrupt/i8259.c interrupt/i8259.h interrupt/../types.h \
+  interrupt/../library/lib.h interrupt/../library/../types.h
+idt_init.o: interrupt/idt_init.c interrupt/../x86_desc.h \
+  interrupt/../types.h interrupt/../library/lib.h \
+  interrupt/../library/../types.h interrupt/idt_init.h \
+  interrupt/sys_call.h interrupt/../filesys.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../types.h \
+  interrupt/../terminal.h interrupt/../process.h interrupt/idt_linkage.h
+keyboard.o: interrupt/keyboard.c interrupt/keyboard.h \
+  interrupt/../types.h interrupt/i8259.h interrupt/../library/lib.h \
+  interrupt/../library/../types.h interrupt/../terminal.h \
+  interrupt/../types.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../filesys.h \
+  interrupt/../process.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h \
+  interrupt/../interrupt/../library/lib.h \
+  interrupt/../interrupt/../filesys.h interrupt/../interrupt/rtc.h \
+  interrupt/../interrupt/i8259.h interrupt/../interrupt/../terminal.h \
+  interrupt/../interrupt/../types.h interrupt/../interrupt/../process.h \
+  interrupt/../terminal.h interrupt/idt_init.h interrupt/sys_call.h
+pit.o: interrupt/pit.c interrupt/pit.h interrupt/../types.h \
+  interrupt/../library/lib.h interrupt/../library/../types.h \
+  interrupt/../process.h interrupt/../types.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../process.h interrupt/../paging.h \
+  interrupt/../library/lib.h interrupt/../interrupt/sys_call.h \
+  interrupt/../interrupt/../library/lib.h \
+  interrupt/../interrupt/../filesys.h interrupt/../interrupt/rtc.h \
+  interrupt/../interrupt/i8259.h interrupt/../interrupt/../terminal.h \
+  interrupt/../interrupt/../types.h interrupt/../interrupt/../process.h \
+  interrupt/../terminal.h
+rtc.o: interrupt/rtc.c interrupt/rtc.h interrupt/i8259.h \
+  interrupt/../types.h interrupt/../library/lib.h \
+  interrupt/../library/../types.h interrupt/../terminal.h \
+  interrupt/../types.h interrupt/../filesys.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h \
+  interrupt/../interrupt/../library/lib.h \
+  interrupt/../interrupt/../filesys.h interrupt/../interrupt/rtc.h \
+  interrupt/../interrupt/../terminal.h \
+  interrupt/../interrupt/../process.h interrupt/../terminal.h
+sb16.o: interrupt/sb16.c interrupt/sb16.h interrupt/../library/lib.h \
+  interrupt/../library/../types.h interrupt/sys_call.h \
+  interrupt/../filesys.h interrupt/../types.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../types.h \
+  interrupt/../terminal.h interrupt/../process.h
+sys_call.o: interrupt/sys_call.c interrupt/sys_call.h \
+  interrupt/../library/lib.h interrupt/../library/../types.h \
+  interrupt/../filesys.h interrupt/../types.h interrupt/../process.h \
+  interrupt/../interrupt/keyboard.h interrupt/../interrupt/../types.h \
+  interrupt/../filesys.h interrupt/../paging.h interrupt/../library/lib.h \
+  interrupt/../interrupt/sys_call.h interrupt/../terminal.h \
+  interrupt/rtc.h interrupt/i8259.h interrupt/../types.h \
+  interrupt/../terminal.h interrupt/../process.h
+cursor.o: library/cursor.c library/cursor.h library/lib.h \
+  library/../types.h library/../terminal.h library/../types.h
+dynamic_allocation.o: library/dynamic_allocation.c \
+  library/dynamic_allocation.h library/../types.h library/lib.h \
+  library/../paging.h library/../types.h
+lib.o: library/lib.c library/lib.h library/../types.h library/cursor.h \
+  library/../terminal.h library/../types.h library/../paging.h \
+  library/../process.h library/../interrupt/keyboard.h \
+  library/../interrupt/../types.h library/../filesys.h \
+  library/../process.h library/../paging.h library/../library/lib.h \
+  library/../interrupt/sys_call.h library/../interrupt/../library/lib.h \
+  library/../interrupt/../filesys.h library/../interrupt/rtc.h \
+  library/../interrupt/i8259.h library/../interrupt/../terminal.h \
+  library/../interrupt/../process.h library/../terminal.h

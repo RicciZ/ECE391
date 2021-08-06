@@ -1,0 +1,206 @@
+Reporter:   Zhou Qinren
+Time:       2021-3-21 18:09
+
+Bug:        After executing the system call, the program crashes, not return to where it was called.
+
+How to Fix: Write the assembly linkage!!!
+            At the beginning, we just use C functions as system calls, and set IDT entry to the
+            corresponding function pointers. Thus, we did not preserve some registers such as %eax
+            and %edx, which possibly causes this issue.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-3-22 4:21
+
+Bug:        After an exception is thrown, the keyboard is still able to interrupt and print a character
+            on the screen.
+
+How to Fix: We forgot to set cli() when writing the exception function. Since the IF flag is not cleared,
+            interrupt may still occur.
+
+
+
+
+
+Reporter:   Jing Tengjun
+Time:       2021-3-22 22:32
+
+Bug:        When a keyboard is hit, the screen shows a complete mess.
+
+How to Fix: In the keyboard_interrupt function, use putc() instead of printf(). Since we are not printing
+            a string, it is incorrect to use printf("%s", ..). 
+
+
+
+
+
+Reporter:   Zhang Yichi
+Time:       2021-3-22 23:56
+
+Bug:        When doing the test_interrupts for the RTC, it refreshed the whole screen once and stoped and
+            raised an exception of general protection exception.
+
+How to Fix: Set cli() and sti() for throwing away the bits in register C and sending eoi, then the screen
+            can refresh continuously.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-3-27 3:21
+
+Bug:        Having done implementing read_dentry_by_name() and read_dentry_by_index() functions, we found
+            those two doesn't work. They acted as if they have done nothing.
+
+How to Fix: At first, we set the input pointer to point to the corresponding dentry. This actually does 
+            nothing, since C language treats parameters as values, and our modification to these parameters
+            has no impact on the actual pointers. Therefore, we dereference these pointers, and change 
+            the corresponding contents.
+
+
+
+
+
+Reporter:   Jing Tengjun
+Time:       2021-3-28 15:08
+
+Bug:        terminal_read is supposed to read in 127 characters, including enter '\n'. However, our program
+            reads in the 127 characters, excluding '\n', and it can no longer read the enter '\n'.
+
+How to Fix: We restrict the 127th character to be only enter '\n' or backspace '\b'. In this way, the 
+            buffer always leaves a byte for enter.
+
+
+
+
+
+Reporter:   Zhang Yichi
+Time:       2021-3-28 23:40
+
+Bug:        The process stuck in the while loop in rtc_read.
+
+How to Fix: I count the interrupts in the rtc_interrupt, so after x interrupts, I reset the count in the 
+            rtc_interrupt mistakenly. Now I reset it in the rtc_read after the while loop.
+
+
+
+
+
+Reporter:   Zhang Yichi
+Time:       2021-3-29 2:03
+
+Bug:        The dir_read cannot read the verylargetextwithverylongname.tx. 
+
+How to Fix: The strcpy and strlen will only stop when a '\0' is encountered but this file does not end 
+            with '\0'. Therefore, we create a 33B char array to store the name and add a '\0' at the end 
+            manually.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-10 3:21
+
+Bug:        After having implemented system_execute, I tried to create a new process, which failed and 
+            acted as if nothing was done.
+
+How to Fix: Remember to initialize the Prcoess Control Block before starting the first process. In my 
+            implementation, each PCB has a pid number, and if (pid == -1), then this PCB is unused. It
+            is required to initialize all pid to -1 before create the first process.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-11 23:08
+
+Bug:        The OS keeps rebooting. 
+
+How to Fix: I set the TSS.esp0 to an uninitialized value, which causes this unpredictable behavior.
+            ALWAYS REMREBER TO INITIALIZE ANY VALUE BEFORE USING IT !!!
+            USE GDB WISELY !!! BE PATIENT !!!
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-12 1:13
+
+Bug:        After having implemented system_halt(), the process does not return as what we desired.
+
+How to Fix: I was confused about the relation between kernel stack pointers of each distinct process. In
+            system_execute(), parent.kesp should preserve the current value of esp before we call IRET.
+            In system_halt(), we should load esp with parent.kesp before JMP instruction. In this way,
+            the process return to the right place and the assembly linkage pops the correct arguments.
+
+
+
+
+
+Reporter:   Zhang Yichi
+Time:       2021-4-12 10:20
+
+Bug:        file_open can open "\n\0" which should fail.
+
+How to Fix: Modify the read_dentry_by_name by checking the length of the file name.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-18 20:01
+
+Bug:        Each time a process halts, the esp does not point to where it should be.
+
+How to Fix: Set the TSS.esp0 correctly. Each time a process halts, the TSS.esp0 should point to the bottom
+            of its parent's kernel stack, because after halt-execute returns, and the rest part of idt
+            linkage finishes, there should be nothing on the parent's kernel stack.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-26 2:17
+
+Bug:        terminal_write fails to print characters on the screen from time to time, but the cursor
+            updates correctly.
+
+How to Fix: When a schedule function is called, the paging mapping is modified for different terminals, but
+            I forgot to flush TLB. Hence, for some virtual addresses, their corresponding physical memories
+            remain unchanged.
+
+
+
+
+
+Reporter:   Zhang Yichi
+Time:       2021-4-27 10:22
+
+Bug:        Opening three pingpongs in different terminals will make the OS stuck, sometimes crashed.
+
+How to Fix: Use three variables to store the three required frequencies for three terminals. Otherwise, one
+            terminal's rtc interrupt might interrupt the waiting while loop in other terminals' rtc_read 
+            which would crash the OS.
+
+
+
+
+
+Reporter:   Zhou Qinren
+Time:       2021-4-27 13:57
+
+Bug:        While running fish program on one terminal, a page fault occurs once I switch to another
+            terminal.
+
+How to Fix: I thought that if the fish program is running in background, then the user-level video page
+            should be closed. However, it actually should be mapped to the corresponding backup memory. so
+            that the fish program can update in the background. 
